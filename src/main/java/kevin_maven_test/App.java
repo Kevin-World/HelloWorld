@@ -17,6 +17,5 @@ public class App {
 
 		String id = UUID.randomUUID().toString();
 		return id;
-
 	}
 }
