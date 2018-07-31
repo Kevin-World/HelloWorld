@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
