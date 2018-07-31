@@ -4,69 +4,69 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class jdbcUtil {
-
-	private Properties props;
-	private String user;
-	private String password;
-	private String className;
-	private String url;
-
-	private Connection conn;
-
+	private static String user;
+	private static String password;
+	private static String className;
+	private static String url;
+	
+	/**************************************************************
+	 * loagJdbc：获取配置文件的值
+	 * @author Joker
+	 **************************************************************/
 	private void loagJdbc() {
 		try {
-			props = new Properties();
+			Properties props = new Properties();
 			props.load(new FileInputStream("jdbc.properties"));
 			
 			className = props.getProperty("jdbc.className");
 			url = props.getProperty("jdbc.url");
 			user = props.getProperty("jdbc.user");
 			password = props.getProperty("jdbc.password");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void loagDriver() {
-		try {
-			Class.forName(className);
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * getConnect
-	 * */
+	/**************************************************************
+	 * getConnect：连接数据库
+	 * @author Joker
+	 **************************************************************/
 	public Connection getConnect() {
-		this.loagJdbc();
-        
-		System.out.println(className);
-		System.out.println(url);
-		System.out.println(user);
-		System.out.println(password);
-		
-		this.loagDriver();
+	    Connection conn;
+
 		try {
+			this.loagJdbc();
+			Class.forName(className);
 			conn = DriverManager.getConnection(url, user, password);
-			
 			System.out.println("数据库连接成功！");
 			
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			// TODO: handle exception
 			conn = null;
 			e.printStackTrace();
 		}
-
+		catch (Exception e) {
+			// TODO: handle exception
+			conn = null;
+			e.printStackTrace();
+		}
 		return conn;
 	}
 	
-	public void closeConn() {
+	/**************************************************************
+	 * closeConn：关闭数据库连接
+	 * @author Joker
+	 * @param conn
+	 **************************************************************/
+	public void closeConn(Connection conn) {
 		try {
 			if (conn != null) {
 				conn.close();
@@ -76,11 +76,52 @@ public class jdbcUtil {
 			e.printStackTrace();
 		}
 	}
+
+	/**************************************************************
+	 * closeStmt：关闭数据库连接
+	 * @author Joker
+	 * @param stmt
+	 **************************************************************/
+	public void closeStmt(Statement stmt) {
+		try {
+			if (stmt != null) {
+				stmt.close();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 	
-	public void testClass() {
-		//user = "test";
-		//password = "123456";
-		System.out.println(user);
-		System.out.println(password);		
+	/**************************************************************
+	 * closePstmt：关闭数据库连接
+	 * @author Joker
+	 * @param pstmt
+	 **************************************************************/
+	public void closePstmt(PreparedStatement pstmt) {
+		try {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	/**************************************************************
+	 * closePstmt：关闭数据库连接
+	 * @author Joker
+	 * @param rs
+	 **************************************************************/
+	public void closeRs(ResultSet rs) {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 }
